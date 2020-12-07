@@ -6,9 +6,8 @@ namespace Great_Album
     {
         public static bool CanLogin(string login, string password)
         {
-            //UsersManager myStorage = new UsersManager();
-            //return myStorage.CheckLoginAndPass(login, password);
-            return true;
+            UsersManager myStorage = new UsersManager();
+            return myStorage.CheckLoginAndPass(login, password);
         }
     }
 }
