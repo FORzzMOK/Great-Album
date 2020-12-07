@@ -1,0 +1,160 @@
+﻿@using System;
+@using Users.BLL;
+@using Entities;
+@using System.Drawing;
+@using System.IO;
+@{
+    Layout = "~/Pages/_Mainlayout.cshtml";
+    UsersManager myStorage = new UsersManager();
+    User user = myStorage.GetUserByLogin(User.Identity.Name.ToString());
+    Dictionary<string, byte[]> photos = myStorage.GetUsersPhoto(User.Identity.Name.ToString());
+    //string mystring = Request.QueryString["Parameter"].ToString();
+
+}
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <title>@user.Login</title>
+    <style>
+        section .hat {
+            width: 900px;
+            height: 330px;
+            margin: 2px;
+            margin-bottom: 1px;
+        }
+
+        section .avatarBlock {
+            height: 300px;
+            width: 225px;
+            background-color: white;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 2px;
+            position: absolute;
+            border: 1px solid #D0D0D0;
+        }
+
+            section .avatarBlock .avatar {
+                height: 100%;
+                width: 100%;
+                
+                background-size: cover;
+                background-position: center;
+                border-radius: 4px;
+            }
+
+        section .info {
+            height: 320px;
+            width: 541px;
+            border: 1px solid #D0D0D0;
+            border-radius: 5px;
+            color: #181818;
+            background-color: white;
+            position: absolute;
+            margin: 2px;
+            padding-left: 50px;
+            padding-right: 50px;
+            left: 256px;
+        }
+        section .info .name {
+            font-size: 20px;
+        }
+        section .info .status {
+            font-size: 15px;
+        }
+        section .info .usersInfo {
+            width: 600px;
+            font-size: 18px;
+            text-align: left;
+        }
+
+
+        section .imageBoard {
+            width: 895px;
+            height: 100%;
+            border-radius: 5px;
+            margin-left: 4px;
+        }
+
+            section .imageBoard .buttonBlock {
+                height: 50px;
+                width: 893px;
+            }
+
+            section .imageBoard button {
+                width: 448px;
+                height: 50px;
+                background-color: white;
+                font-size: 25px;
+                margin: 0px;
+                position: absolute;
+                border: none;
+                border-bottom: 2px solid black;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+
+            section .imageBoard .imageBlock {
+                height: 800px;
+                width: 870px;
+                background-color: white;
+                border-radius: 5px;
+                padding: 10px;
+                margin: 2px;
+                border: 1px solid #D0D0D0;
+            }
+
+                section .imageBoard .imageBlock .image {
+                    height: 90%;
+                    width: auto%;
+                    background-size: cover;
+                    background-position: center;
+                    border-radius: 4px;
+                    border: 1px solid #D0D0D0;
+                    box-shadow: 0px 0px 10px black;
+                }
+    </style>
+</head>
+<div class="hat">
+    <div class="avatarBlock">
+        <div class="avatar" style="background-image: url(@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(user.Avatar)))"></div>
+    </div>
+    <div class="info">
+        <h1 class="name">@user.Name @user.Surname      @user.Login</h1>
+        <hr />
+        <h1 class="status">@user.Status</h1>
+        <table class="usersInfo">
+            @if (user.DateOfBirth > new DateTime(1900, 01, 01))
+            {
+                <tr>
+                    <th>Date of birth: </th>
+                    <th>@user.DateOfBirth.ToString("yyyy-MM-dd")</th>
+                </tr>
+            }
+            @if ( user.Email != null && user.Email != "")
+            {
+                <tr>
+                    <th>Email: </th>
+                    <th>@user.Email</th>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+
+<div class="imageBoard">
+    @foreach (KeyValuePair<string, byte[]> photo in photos)
+    {
+        <div class="imageBlock">
+            <h1>@photo.Key</h1>
+            <div class="image" style="background-image: url(@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(photo.Value)))"></div>
+        </div>
+    }
+</div>
+<script>
+    headButtonBlock.onmousedown = function () {
+        return false;
+    };
+</script>

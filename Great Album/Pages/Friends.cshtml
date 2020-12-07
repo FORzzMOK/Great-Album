@@ -1,0 +1,28 @@
+﻿@using Users.BLL;
+@using Entities;
+@using System.Web.UI.WebControls;
+
+@{
+    Layout = "~/Pages/_Mainlayout.cshtml";
+    UsersManager myStorage = new UsersManager();
+    List<User> usersList = myStorage.GetUsersList();
+}
+<head>
+    <style>
+        h1 {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+@foreach (User item in usersList)
+{
+<form method="post">
+    <h1></h1>
+    <button id="@item.Login"> @item.ToString() </button>
+</form>
+    if (IsPost)
+    {
+        Response.Redirect("~/Pages/FriendsPage.cshtml?Parameter=" + item.Login);
+    }
+}
+

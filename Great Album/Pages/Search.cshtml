@@ -1,0 +1,81 @@
+﻿@using Users.BLL;
+@{
+    Layout = "~/Pages/_Mainlayout.cshtml";
+    UsersManager myStorage = new UsersManager();
+    Dictionary<string, byte[]> photos = myStorage.GetAllPhoto();
+    string search = "";
+
+    if (IsPost)
+    {
+        search = Request["Search"];
+        //if (search != "" && search != null)
+        //{
+        //    Dictionary<string, byte[]> newPhotos = new Dictionary<string, byte[]>();
+        //    foreach (KeyValuePair<string, byte[]> photo in photos)
+        //    {
+        //        if (photo.Key == search) {
+        //            newPhotos.Add(photo.Key, photo.Value);
+        //        }
+        //    }
+        //    Response.Redirect("~/Pages/Search.cshtml");
+        //}
+    }
+}
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <style>
+        .imageBlock {
+            height: 800px;
+            width: 870px;
+            background-color: white;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 2px;
+            border: 1px solid #D0D0D0;
+        }
+
+            .imageBlock .image {
+                height: 90%;
+                width: auto;
+                background-size: cover;
+                background-position: center;
+                border-radius: 4px;
+                border: 1px solid #D0D0D0;
+                box-shadow: 0px 0px 10px black;
+            }
+    </style>
+</head>
+<form method="post">
+    <table>
+        <tr>
+            <td><input type="text" name="Search" value="Select" style="width: 315px;" /></td>
+            <td><button class="myButton_3"> Search </button></td>
+        </tr>
+    </table>
+</form>
+@if (search == "")
+{
+    foreach (KeyValuePair<string, byte[]> photo in photos)
+    {
+        <div class="imageBlock">
+            <h1>@photo.Key</h1>
+            <div class="image" style="background-image: url(@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(photo.Value)))"></div>
+        </div>
+    }
+}
+else
+{
+    foreach (KeyValuePair<string, byte[]> photo in photos)
+    {
+        if (photo.Key.Contains(search) || search.Contains(photo.Key))
+        {
+            <div class="imageBlock">
+                <h1>@photo.Key</h1>
+                <div class="image" style="background-image: url(@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(photo.Value)))"></div>
+            </div>
+        }
+
+    }
+}
